@@ -29,7 +29,7 @@
 
 <body id="config-body" ng-controller="dashboardController">
 
-  <nav class="navbar navbar-inverse">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">Product Dashboard</a>
@@ -63,7 +63,7 @@
 
   </nav>
 
-  <div class="container">
+  <div class="container cst-top">
 
     <h3>Welcome to dashboard!!</h3>
     <p ng-if="!prodSelected">Below Graphs shows the overall product availability of all brands. Please select a brand
@@ -78,7 +78,7 @@
       <br>
       <br>
       <div class="custm-div">Click on show all button to view all the graphs</div>
-    </div>
+    </div> <div class="custm-div-orange" ng-if="!overallFlag">Click on overall button to view the overall scores of the product</div>
     <div class="row">
 
       <render-line-chart product="productName" from="fromDate" to="toDate" prodlist="data" overall="overallFlag"></render-line-chart>
