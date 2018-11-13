@@ -8,13 +8,20 @@ DashboardApp
 				product: '=',
 				from: "=",
 				to: "=",
-				prodlist: "="
+				prodlist: "=",
+				overall : "="
 
 			},
 			link: function (scope, element) {
 				scope.$watch('product', function (newVal, oldVal) {
 					if (newVal) {
 						init(newVal, '', '', scope.prodlist);
+					}
+				});
+
+				scope.$watch('overall', function (newVal, oldVal) {
+					if (newVal) {
+						init('overall',undefined,undefined,scope.prodlist);
 					}
 				});
 
@@ -32,10 +39,44 @@ DashboardApp
 
 				scope.$watch('prodlist', function (newVal, oldVal) {
 					if (newVal) {
-						init(scope.product, scope.from, scope.to, newVal);
+						loadAll(newVal);
 					}
 				});
+				
+				function loadAll(prodlist) {
+					
+					var html = '';
+					var scores;
+					var categoriesList = [];
+					var values = [];
+					$.each(prodlist.result.overall.merchants, function (k, v) {
+						
+							scores = v;
 
+							for (var key in scores) {
+								if (scores.hasOwnProperty(key)) {
+								
+										categoriesList.push(key);
+										values.push(parseInt(scores[key]));
+									
+								}
+							}
+
+							var scores = {};
+							var length = categoriesList.length;
+							for (var i = 0; i < length; i++) {
+								scores[categoriesList[i]] = values[i];
+							}
+							scores = JSON.stringify(scores)
+							var base64scores = btoa(scores);
+
+							html = html + '<div class="col-md-4 margin20" ' + '" model-line-chart score="' + base64scores + '" productname="' + k + '"></div>';
+						
+					})
+					
+					element.html(html);
+					$compile(element.contents())(scope);
+				}
 				function init(product, from, to, prodlist) {
 
 					var html = '';
@@ -46,7 +87,7 @@ DashboardApp
 						scores = JSON.stringify(scores)
 						var base64scores = btoa(scores);
 
-						html = html + '<div class="row graphWrap" ' + '" model-line-chart score="' + base64scores + '" productname="' + product + '"></div>';
+						html = html + '<div class="col-md-12" ' + '" model-line-chart score="' + base64scores + '" productname="' + product + '"></div>';
 					}
 					else if (scope.product != "" && prodlist != undefined) {
 						if (from == undefined || from == "") {
@@ -69,18 +110,18 @@ DashboardApp
 							}
 						}
 
-						var fromDate=new Date(from);
-						var toDate=new Date(to);
-						if(toDate<=fromDate){
-							html = html +'<div class="alert alert-danger"><strong>Danger!</strong>Invalid Date Range!! From date should always be less than To date</div>';
+						var fromDate = new Date(from);
+						var toDate = new Date(to);
+						if (toDate <= fromDate) {
+							html = html + '<div class="alert alert-danger"><strong>Danger!</strong>Invalid Date Range!! From date should always be less than To date</div>';
 						}
-						else{
+						else {
 							var categoriesList = [];
 							var values = [];
 							$.each(prodlist.result.overall.merchants, function (k, v) {
 								if (k == scope.product) {
 									scores = v;
-	
+
 									for (var key in scores) {
 										if (scores.hasOwnProperty(key)) {
 											var date = new Date(key);
@@ -90,7 +131,7 @@ DashboardApp
 											}
 										}
 									}
-	
+
 									var scores = {};
 									var length = categoriesList.length;
 									for (var i = 0; i < length; i++) {
@@ -99,12 +140,12 @@ DashboardApp
 									console.log(scores)
 									scores = JSON.stringify(scores)
 									var base64scores = btoa(scores);
-	
-									html = html + '<div class="row graphWrap" ' + '" model-line-chart score="' + base64scores + '" productname="' + product + '"></div>';
+
+									html = html + '<div class="col-md-12" ' + '" model-line-chart score="' + base64scores + '" productname="' + product + '"></div>';
 								}
 							})
 						}
-						
+
 					}
 
 					element.html(html);

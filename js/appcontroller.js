@@ -29,7 +29,6 @@ DashboardApp
 													} else {
 														$scope.data = d;
 														var scores=$scope.data.result.overall.score
-														console.log(d);
 														$.each($scope.data.result.overall.merchants,function(key,value){
 															$scope.products.push(key);
 															
@@ -37,6 +36,7 @@ DashboardApp
 														for (var key in scores) {
 															if (scores.hasOwnProperty(key)) {
 																$scope.dates.push(key);
+																
 															}
 														}
 													}
@@ -54,6 +54,7 @@ DashboardApp
 				  $scope.productName=prodName;
 				  $scope.fromDate="";
 				  $scope.toDate="";
+				  $scope.overallFlag=false;
 				}
 
 				$scope.setFromDate=function(date){
@@ -64,13 +65,19 @@ DashboardApp
                    $scope.toDate=date;
 				}
 
-				$scope.filter=function(){
+
+				 $scope.showAll=function(){
+					$scope.prodSelected=false;	
+					$scope.products=[];
+					$scope.dates=[];
+					$scope.overallFlag=false;
+					$scope.onload();
 					
 				 }
-
-					
-				
-				
+				 $scope.overall=function(){
+					 $scope.overallFlag=true;
+					 $scope.prodSelected=false;
+				 }
 } ]);
 
 
