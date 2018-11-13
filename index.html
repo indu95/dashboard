@@ -1,0 +1,77 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" ng-app="DashboardApp">
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard</title>
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<link href="css/custom.css" rel="stylesheet" />
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/highcharts.js"></script>
+<script src="js/angular.js"></script>
+<script src="js/angular-route.js"></script>
+<script src="js/app.js"></script>
+<script src="js/appcontroller.js"></script>
+<script src="js/appservice.js"></script>
+<script src="js/renderhtmldirective.js"></script>
+<script src="js/linechartdirective.js"></script>
+
+
+
+<style>
+
+</style>
+</head>
+
+<body id="config-body" ng-controller="dashboardController">
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Product Dashboard</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#" ng-click="">Home- overall availability</a></li>
+      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Brands<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li ng-repeat="prod in products"><a href="" ng-click="selectProduct(prod)">{{prod}}</a></li>
+        </ul>
+      </li>
+      <li ng-if="prodSelected" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">From<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li ng-repeat="date in dates"><a href="" ng-click="setFromDate(date)">{{date}}</a></li>
+        </ul>
+      </li>
+	  
+	    <li ng-if="prodSelected" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">To<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li  ng-repeat="date in dates"><a href="" ng-click="setToDate(date)">{{date}}</a></li>
+        </ul>
+      </li>
+     
+    </ul>
+	
+
+  </div>
+</nav>
+  
+<div class="container">
+  <h3>Welcome to dashboard!!</h3>
+  <p ng-if="!prodSelected">Below Graph shows the overall product availability. Please select a brand from the above dropdown to see the particular brand product availabity scores</p>
+
+  <div ng-if="prodSelected"> 
+    <div> Selected Brand - <b>{{productName}}</b></div>
+    Select the from and to date range from the above dropdown to see the data for different time range
+   <div ng-if="fromDate"><b>From - {{fromDate}} &emsp; To- {{toDate}}</b></div>
+  </div>
+  <render-line-chart product="productName" from="fromDate" to="toDate" prodlist="data"></render-line-chart>
+
+</div>
+<div ng-view id="view"></div>
+</body>
+
+</html>
